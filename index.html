@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventori Barang</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            max-width: 600px; 
+            margin: 20px auto; 
+            padding: 20px; 
+        }
+        input, button { 
+            padding: 8px; 
+            margin: 5px; 
+        }
+        .item { 
+            background: #f5f5f5; 
+            padding: 10px; 
+            margin: 5px 0; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Inventori Barang</h1>
+    <input type="text" id="namaBarang" placeholder="Nama Barang">
+    <input type="number" id="jumlahBarang" placeholder="Jumlah">
+    <button onclick="tambahBarang()">Tambah</button>
+    <div id="daftarBarang"></div>
+
+    <script>
+        // Muat data saat halaman terbuka
+        window.onload = function() {
+            const data = localStorage.getItem('inventori');
+            if (data) {
+                document.getElementById('daftarBarang').innerHTML = data;
+            }
+        };
+
+        // Fungsi tambah barang
+        function tambahBarang() {
+            const nama = document.getElementById('namaBarang').value;
+            const jumlah = document.getElementById('jumlahBarang').value;
+
+            if (nama && jumlah) {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.innerHTML = `
+                    ${nama} (${jumlah})
+                    <button onclick="hapusBarang(this)">Hapus</button>
+                `;
+
+                document.getElementById('daftarBarang').appendChild(item);
+                simpanData();
+
+                // Kosongkan input
+                document.getElementById('namaBarang').value = '';
+                document.getElementById('jumlahBarang').value = '';
+            }
+        }
+
+        // Fungsi hapus barang
+        function hapusBarang(button) {
+            button.parentElement.remove();
+            simpanData();
+        }
+
+        // Simpan data ke localStorage
+        function simpanData() {
+            const daftar = document.getElementById('daftarBarang').innerHTML;
+            localStorage.setItem('inventori', daftar);
+        }
+    </script>
+</body>
+</html>
